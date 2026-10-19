@@ -1,0 +1,37 @@
+# Use postgres/example user/password credentials
+
+services:
+
+  db-auth:
+    image: postgres:17
+    ports:
+      - "5433:5432"
+    # set shared memory limit when using docker compose
+    #shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    volumes:
+      - auth_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: food-delivery-auth#1234$
+      POSTGRES_DB: food-delivery-auth
+
+  db-users:
+    image: postgres:17
+    ports:
+      - "5434:5432"
+    volumes:
+      - user_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: food-delivery-user#1234$
+      POSTGRES_DB: food-delivery-user
+
+  adminer:
+    image: adminer
+    ports:
+      - 8090:8080
+
+volumes:
+  auth_postgres_data:
+  user_postgres_data:
